@@ -1,8 +1,11 @@
 ### Create a Django Project:
-django-admin startproject aquasage_project
+django-admin startproject aquasageproject
 
 ### Create a Django App:
-python manage.py startapp aqua_app
+python manage.py startapp aquaapp
+
+
+
 
 
 
@@ -13,7 +16,7 @@ python manage.py createsuperuser
 ### Run Migrations:
 python manage.py migrate
 
-python manage.py makemigrations teamzeffort
+python manage.py makemigrations
 
 
 ### Start Development Server:

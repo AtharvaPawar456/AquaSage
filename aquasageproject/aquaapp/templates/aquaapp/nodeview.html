@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    {% load static %}
+
+    <script src="{% static 'agroapp\setup\tailwindcss.js' %}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <script src="{% static 'agroapp\setup\Chart.min.js' %}" charset="utf-8" ></script>
+    <link rel="stylesheet" href="{% static 'agroapp\setup\Chart.min.css' %}" />
+
+
+    <title>Nodes</title>
+</head>
+<body>
+
+<!-- Laptop View -->
+<div class="hidden lg:block">
+    <!-- <p>This is the content for laptop view</p> -->
+
+    <!-- Navbar -->
+    <div class="h-16 fixed top-0 w-full bg-white">
+        <div class="grid grid-cols-4 border h-16">
+
+            <a href="{% url 'viewNodes' %}" class="text-2xl text-center font-bold py-3 pl-4 grid grid-cols-3">
+                <div class="overflow-hidden transform transition-transform hover:scale-125">
+                    <img src="{% static 'agroapp\setup\images\logo-2.png' %}" class="h-10 w-12 rounded-full border border-2 border-gray-300 scale-705 mx-auto hover:shadow-xl" alt="Plant root img" />
+                </div>
+                    <div class="col-span-2 text-left">ECOFLOW</div>
+            </a>
+
+            <div></div>
+            <div class="col-span-2 h-16">
+                <div class="grid grid-cols-5 h-16">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'user_logout' %}" class="col-span-2">
+                      <div
+                        class="text-xl py-3 h-16 font-bold text-center text-green-500 hover:text-green-900 hover:bg-green-100"
+                      >
+                        <i class="fa-solid fa-user"></i> {{ user.username }}
+                        <i class="fa-solid fa-right-from-bracket ml-2"></i>
+                      </div>
+                    </a>
+                    {% else %}
+                    <div></div>
+                    <div></div>
+                    <a href="{% url 'user_login' %}">
+                      <div
+                        class="text-xl py-3 h-16 font-bold text-center text-green-500 hover:text-green-900 hover:bg-green-100"
+                      >
+                        <i class="fa-solid fa-user"></i> Login
+                      </div>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Node List -->
+    
+    <div class="grid grid-cols-2 gap-4">
+        
+        <div class="grid grid-cols-2 gap-4 p-20 ">
+            <div class="py-10 text-center text-2xl font-bold col-span-2">Node List for {{ request.user.username }}</div>
+            
+            <!-- Node Card Starts -->
+            <a href="{% url 'addnode' %}">
+                <div class="h-[200px] border shadow rounded-xl text-center py-16 hover:bg-orange-200">
+                    <div><i class="fa-regular fa-square-plus text-6xl"></i></div>
+                    <div class="font-bold text-xl">Add New Node</div>
+                </div>
+            </a>
+
+            <!-- Node Card Ends -->
+            {% if user_nodes %}
+                {% for node in user_nodes %}
+                    <!-- Node Card Starts -->
+                    <!-- # route : sensordata/?api_key=123&node=esp32_2&Depth_1=45.3&Depth_2=49.3&Depth_3=55.9  -->
+                    
+                    <a href="/viewNodeData/?username={{ request.user.username }}&nodename={{ node.node_name }}">
+                        <div class="h-[200px] border shadow rounded-xl text-center py-12 hover:bg-[#f0fdf4]">
+                            <div>Node</div>
+                            <div class="font-bold text-xl py-2">{{ node.node_name }}</div>
+                            <div class="text-sm">Lat : {{ node.Loc_lat }}</div>
+                            <div class="text-sm">Long: {{ node.Loc_long }}</div>
+                        </div>
+                        </a>
+                    <!-- Node Card Ends -->
+                {% endfor %}
+            {% endif %}
+            
+
+        </div>
+        
+        <!-- Cluster of Node -->
+        
+        <div class="grid grid-cols-2 gap-4 p-20 ">
+            <div class="py-10 text-center text-2xl font-bold col-span-2">Cluster List for {{ request.user.username }}</div>
+            
+
+            <!-- Cluster Card Starts -->
+            <a href="{% url 'addcluster' %}">
+                <div class="h-[200px] border shadow rounded-xl text-center py-16 hover:bg-orange-200">
+                    <div><i class="fa-regular fa-square-plus text-6xl"></i></div>
+                    <div class="font-bold text-xl">Add New Cluster</div>
+                </div>
+            </a>
+
+            <!-- Cluster Card Ends -->
+            {% if user_clusterdata %}
+                {% for node in user_clusterdata %}
+                
+                    <!-- Cluster Card Starts -->
+                    <!-- # route : viewclusterData/?username=abc&clustername=alphaNode  -->
+
+                    <a href="/viewclusterData/?username={{ request.user.username }}&clustername={{ node.cluster_name }}">
+                        <div class="h-[200px] border shadow rounded-xl text-center py-12 hover:bg-[#f0fdf4]">
+                            <div>Cluster</div>
+                            <div class="font-bold text-xl py-2">{{ node.cluster_name }}</div>
+                            <div class="text-sm">Nodes{{ node.clust_data }}</div>
+                        </div>
+                    </a>
+                    <!-- Cluster Card Ends -->
+                
+                {% endfor %}
+            {% endif %}
+
+            
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<!-- Mobile View -->
+<div class="block lg:hidden md:hidden">
+    <!-- <p>This is the content for mobile view</p> -->
+    <div class="fixed top-0 w-full bg-white text-2xl text-center font-bold py-3">
+        Logo | AgroSense
+    </div>
+
+    <!-- Content Starts -->
+    <div>
+
+        <!-- Chart -->
+        <div id="sensordata" class="h-screen pt-16 ">
+            <div class="text-2xl text-center font-bold py-3">sensordata</div>
+        </div>
+        
+        <!-- Chart -->
+        <div id="chart" class="h-screen pt-16 ">
+            <div class="text-2xl text-center font-bold py-3">chart</div>
+        </div>
+        
+        <!-- Chart -->
+        <div id="datalog" class="h-screen pt-16 ">
+            <div class="text-2xl text-center font-bold py-3">datalog</div>
+        </div>
+        
+        <!-- Chart -->
+        <div id="chart" class="h-screen pt-16 ">
+            <div class="text-2xl text-center font-bold py-3"></div>
+        </div>
+        
+    </div>
+    <!-- Content Ends -->
+
+    
+    <!-- Bottom Mobile Navbar controls -->
+    <div class="h-12 fixed bottom-0 w-full bg-white">
+        
+            <div class="col-span-2 h-12">
+                <div class="grid grid-cols-5 h-12">
+                    <a href="#" class="h-16">
+                        <div class="text border py-3 h-12 font-bold text-center text-green-500 hover:text-green-900 hover:bg-green-100">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                        </div>
+                    </a>
+                    <a href="#sensordata" class="h-16">
+                        <div class="text border py-3 h-16 font-bold text-center text-green-500 hover:text-green-900 hover:bg-green-100">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </div>
+                    </a>
+                    <a href="#chart">
+                        <div class="text border py-3 h-16 font-bold text-center text-green-500 hover:text-green-900 hover:bg-green-100">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                    </a>
+                    <a href="#datalog">
+                        <div class="text border py-3 h-16 font-bold text-center text-green-500 hover:text-green-900 hover:bg-green-100">
+                            <i class="fa-solid fa-database"></i>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div class="text border py-3 h-16 font-bold text-center text-green-500 hover:text-green-900 hover:bg-green-100">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+    </div>
+
+
+
+    <!-- mobile view ends -->
+</div>
+
+
+</body>
+</html>

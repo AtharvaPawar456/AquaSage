@@ -7,44 +7,65 @@ import random
 
 # Create your views here.
 
+
+
 def welcome(request):
-    return HttpResponse('Teamzeffort    |      welcome Page')
+    return HttpResponse('AquaSage    |      welcome Page')
     # return render(request,'tze/business.html')
+
 
 def dashboard(request):
-    return HttpResponse('Teamzeffort    |      dashboard Page')
+    return HttpResponse('AquaSage    |      dashboard Page')
     # return render(request,'tze/business.html')
+
 
 def nodeview(request):
-    return HttpResponse('Teamzeffort    |      nodeview Page')
+    return HttpResponse('AquaSage    |      nodeview Page')
     # return render(request,'tze/business.html')
+
 
 def mapview(request):
-    return HttpResponse('Teamzeffort    |      mapview Page')
+    return HttpResponse('AquaSage    |      mapview Page')
     # return render(request,'tze/business.html')
 
 
+
+
+
+
+
+
+
+
+
+
+
+# example code
+# --------------------------------------------------------------------------------------------
 
 
 # def index(request):
-#     # products = Product.objects.all()
+#     products = Product.objects.all()
 
-#     # all_prods = []
-#     # catProds = Product.objects.values('category', 'Product_id')
-#     # cats = {item['category'] for item in catProds}
-#     # for cat in cats:
-#     #     prod = Product.objects.filter(category=cat)
-#     #     n = len(products)
-#     #     all_prods.append([prod, n]) 
+#     all_prods = []
+#     catProds = Product.objects.values('category', 'Product_id')
+#     cats = {item['category'] for item in catProds}
+#     for cat in cats:
+#         prod = Product.objects.filter(category=cat)
+#         n = len(products)
+#         all_prods.append([prod, n]) 
 
 #     params = {
-#         'catproducts' : "all_prods",
-#         'allproducts' : "products",
+#         'catproducts' : all_prods,
+#         'allproducts' : products,
 #               }
 
-#     return render(request,'aqua_app/index.html', params)
+#     return render(request,'tze/index.html', params)
 
 
+# def business(request):
+#     # return HttpResponse('Teamzeffort    |      business Page')
+#     return render(request,'tze/business.html')
 
 # def about(request):
 #     return render(request,'tze/about.html')
